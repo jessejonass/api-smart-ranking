@@ -1,35 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { Player } from './entities/Player';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class PlayersService {
-  private players: Player[] = [
-    {
-      _id: '123-123-123',
-      name: 'Jessé Jonas',
-      email: 'jessejonas13@gmail.com',
-      phoneNumber: '98985446484',
-      imageUrl: 'https://avatars.githubusercontent.com/u/29109974?v=4',
-      ranking: 'A',
-      rankingPosition: 6,
-    },
-  ];
+  private players: Player[] = [];
 
   async create(createPlayerDto: CreatePlayerDto): Promise<void> {
-    const { name, email, phoneNumber } = createPlayerDto;
+    const playerExists = this.players.find(
+      (p) => p.email === createPlayerDto.email,
+    );
+
+    if (playerExists) {
+      throw new HttpException('Player already exists', HttpStatus.BAD_REQUEST);
+    }
 
     const player: Player = {
       _id: uuid(),
-      name,
-      email,
-      phoneNumber,
+      name: createPlayerDto.name,
+      email: createPlayerDto.email,
+      phoneNumber: createPlayerDto.phoneNumber,
+      imageUrl: createPlayerDto.imageUrl,
       ranking: 'A',
       rankingPosition: 1,
-      imageUrl: 'https://avatars.githubusercontent.com/u/29109974?v=4',
     };
 
     this.players.push(player);
+  }
+
+  async update(email: string, updatePlayerDto: CreatePlayerDto): Promise<void> {
+    const playerIndex = this.players.findIndex((p) => p.email === email);
+
+    if (playerIndex <= -1) {
+      throw new HttpException('Player not found', HttpStatus.NOT_FOUND);
+    }
+
+    const player: Player = {
+      _id: uuid(),
+      name: updatePlayerDto.name,
+      email: updatePlayerDto.email,
+      phoneNumber: updatePlayerDto.phoneNumber,
+      imageUrl: updatePlayerDto.imageUrl,
+      ranking: 'A',
+      rankingPosition: 1,
+    };
+
+    this.players[playerIndex] = player;
+  }
+
+  async delete(email: string): Promise<void> {
+    const playerIndex = this.players.findIndex((p) => p.email === email);
+
+    if (playerIndex <= -1) {
+      throw new HttpException('Player not found', HttpStatus.NOT_FOUND);
+    } else {
+      this.players.splice(playerIndex, 1);
+    }
+  }
+
+  async findAll(): Promise<Player[]> {
+    return this.players;
+  }
+
+  async findOne(email: string): Promise<Player> {
+    const playerExists = this.players.find((player) => player.email === email);
+
+    if (!playerExists) {
+      throw new HttpException('Player not found', HttpStatus.NOT_FOUND);
+    }
+
+    return playerExists;
   }
 }
