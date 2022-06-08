@@ -1,9 +1,10 @@
-export class Player {
-  _id: string;
+import { Document } from 'mongoose';
+
+export class Player extends Document {
   phoneNumber: string;
   email: string;
   name: string;
-  ranking: 'A' | 'B';
+  ranking: string;
   rankingPosition: number;
   imageUrl: string;
 }
