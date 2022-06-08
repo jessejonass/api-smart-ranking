@@ -10,11 +10,11 @@ import {
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { PlayersService } from './players.service';
 
-@Controller('api/v1/players') // path | route
+@Controller('api/v1/players') // route
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
-  @Post('create')
+  @Post('create') // api/v1/players/create
   async create(@Body() player: CreatePlayerDto) {
     this.playersService.create(player);
     return player;

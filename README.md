@@ -31,5 +31,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Jessé Jonas](https://github.com/jessejonass
+- Author - [Jessé Jonas](https://github.com/jessejonass)
 - LinkedIn - [/in/jessejonass](https://linkedin.com/in/jessejonass)
