@@ -10,6 +10,5 @@ export class CreatePlayerDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @IsNotEmpty()
   readonly imageUrl: string;
 }
