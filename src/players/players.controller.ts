@@ -9,10 +9,10 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ValidationParamsPipe } from 'src/common/pipes/validation-params.pipe';
 import { CreatePlayerDto } from './dtos/create-player.dto';
 import { UpdatePlayerDto } from './dtos/update-player.dto';
 import { Player } from './entities/Player';
-import { PlayersValidationParamsPipe } from './pipes/players-validation-params.pipe';
 import { PlayersService } from './players.service';
 
 @Controller('api/v1/players') // route
@@ -32,23 +32,21 @@ export class PlayersController {
 
   @Get(':_id')
   async findOne(
-    @Param('_id', PlayersValidationParamsPipe) _id: string,
+    @Param('_id', ValidationParamsPipe) _id: string,
   ): Promise<Player> {
     return await this.playersService.findOne(_id);
   }
 
   @Put(':_id')
   async update(
-    @Param('_id', PlayersValidationParamsPipe) _id: string,
+    @Param('_id', ValidationParamsPipe) _id: string,
     @Body() updatePlayerDto: UpdatePlayerDto,
   ): Promise<void> {
     await this.playersService.update(_id, updatePlayerDto);
   }
 
   @Delete(':_id')
-  async delete(
-    @Param('_id', PlayersValidationParamsPipe) _id: string,
-  ): Promise<void> {
+  async delete(@Param('_id', ValidationParamsPipe) _id: string): Promise<void> {
     await this.playersService.delete(_id);
   }
 }
