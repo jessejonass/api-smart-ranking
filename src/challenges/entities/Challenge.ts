@@ -6,7 +6,7 @@ export class Challenge extends Document {
   status: string;
   challengeRequestDatetime: Date;
   challengeResponseDatetime: Date;
-  requester: string;
+  requester: Player;
   category: string;
   player: Player[];
   match: Match[];
