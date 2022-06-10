@@ -3,7 +3,7 @@ import { Player } from 'src/players/entities/Player';
 
 export class Challenge extends Document {
   challengeDatetime: Date;
-  status: string;
+  status: keyof typeof ChallengStatus;
   challengeRequestDatetime: Date;
   challengeResponseDatetime: Date;
   requester: Player;
@@ -22,3 +22,11 @@ export type Match = {
 export type Result = {
   set: string;
 };
+
+export enum ChallengStatus {
+  REALIZED = 'DONE',
+  PENDING = 'PENDING',
+  ACCEPTED = 'I ACCEPT',
+  DENIED = 'DENIED',
+  CANCELED = 'CANCELED',
+}
