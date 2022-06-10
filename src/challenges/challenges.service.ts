@@ -55,4 +55,14 @@ export class ChallengesService {
   async findAll(): Promise<Challenge[]> {
     return await this.challengeModel.find().exec();
   }
+
+  async findByPlayer(_id: string): Promise<Challenge[]> {
+    const challenge = await this.challengeModel
+      .find()
+      .where('requester')
+      .equals(_id)
+      .exec();
+
+    return challenge;
+  }
 }
