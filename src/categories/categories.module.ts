@@ -12,5 +12,6 @@ import { CategorySchema } from './entities/category.schema';
   ],
   controllers: [CategoriesController],
   providers: [CategoriesService],
+  exports: [CategoriesService],
 })
 export class CategoriesModule {}
