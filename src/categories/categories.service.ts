@@ -96,4 +96,20 @@ export class CategoriesService {
       { $set: category },
     );
   }
+
+  async findPlayerCategory(playerId: string): Promise<Category> {
+    const playerCategory = await this.categoryModel
+      .findOne()
+      .where('players')
+      .equals(playerId)
+      .select('_id category description');
+
+    await this.playersService.findOne(playerId);
+
+    if (!playerCategory) {
+      throw new BadRequestException('Player has no category');
+    }
+
+    return playerCategory;
+  }
 }
