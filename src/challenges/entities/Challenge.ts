@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Result } from 'src/matches/entities/Result';
 import { Player } from 'src/players/entities/Player';
 import { ChallengeStatusEnum } from './ChallengeStatus.enum';
 
@@ -18,8 +19,4 @@ export type Match = {
   def: Player;
   players: Player[];
   result: Result;
-};
-
-export type Result = {
-  set: string;
 };
