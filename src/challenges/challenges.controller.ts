@@ -4,11 +4,14 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ValidationChallengeStatusPipe } from 'src/common/pipes/validation-challenge-status.pipe';
 import { ChallengesService } from './challenges.service';
 import { CreateChallengeDto } from './dtos/create-challenge.dto';
+import { UpdateChallengeDto } from './dtos/update-challenge.dto';
 import { Challenge } from './entities/Challenge';
 
 @Controller('api/v1/challenges')
@@ -28,8 +31,24 @@ export class ChallengesController {
     return await this.challengesService.findAll();
   }
 
-  @Get(':_id')
-  async findByPlayer(@Param('_id') _id: string): Promise<Challenge[]> {
-    return this.challengesService.findByPlayer(_id);
+  @Get(':challengeId')
+  async findOne(@Param('challengeId') challengeId: string): Promise<Challenge> {
+    return await this.challengesService.findOne(challengeId);
+  }
+
+  @Get(':playerId')
+  async findByPlayer(
+    @Param('playerId') playerId: string,
+  ): Promise<Challenge[]> {
+    return this.challengesService.findByPlayer(playerId);
+  }
+
+  @Put(':challengeId')
+  @UsePipes(ValidationPipe)
+  async updated(
+    @Body(ValidationChallengeStatusPipe) updateChallengeDto: UpdateChallengeDto,
+    @Param('challengeId') challengeId: string,
+  ): Promise<Challenge> {
+    return await this.challengesService.update(challengeId, updateChallengeDto);
   }
 }

@@ -4,7 +4,9 @@ import { Model } from 'mongoose';
 import { CategoriesService } from 'src/categories/categories.service';
 import { PlayersService } from 'src/players/players.service';
 import { CreateChallengeDto } from './dtos/create-challenge.dto';
-import { Challenge, ChallengStatus } from './entities/Challenge';
+import { UpdateChallengeDto } from './dtos/update-challenge.dto';
+import { Challenge } from './entities/Challenge';
+import { ChallengeStatusEnum } from './entities/ChallengeStatus.enum';
 
 @Injectable()
 export class ChallengesService {
@@ -45,7 +47,7 @@ export class ChallengesService {
       ...createChallengeDto,
       category,
       challengeRequestDatetime: new Date(),
-      status: ChallengStatus.PENDING,
+      status: ChallengeStatusEnum.PENDING,
     };
 
     const newChallenge = new this.challengeModel(challenge);
@@ -56,11 +58,44 @@ export class ChallengesService {
     return await this.challengeModel.find().exec();
   }
 
-  async findByPlayer(_id: string): Promise<Challenge[]> {
+  async findByPlayer(playerId: string): Promise<Challenge[]> {
+    await this.playersService.findOne(playerId);
+
     const challenge = await this.challengeModel
       .find()
       .where('requester')
-      .equals(_id)
+      .equals(playerId)
+      .populate('requester, players, match')
+      .exec();
+
+    return challenge;
+  }
+
+  async findOne(challengeId: string): Promise<Challenge> {
+    const challenge = await this.challengeModel.findOne({ _id: challengeId });
+
+    if (!challenge) {
+      throw new BadRequestException(`Challenge ${challengeId} not found`);
+    }
+
+    return challenge;
+  }
+
+  async update(
+    challengeId: string,
+    updateChallengeDto: UpdateChallengeDto,
+  ): Promise<Challenge> {
+    const challenge = await this.findOne(challengeId);
+
+    if (updateChallengeDto.status) {
+      challenge.challengeResponseDatetime = new Date();
+    }
+
+    challenge.status = updateChallengeDto.status;
+    challenge.challengeDatetime = updateChallengeDto.challengeDatetime;
+
+    await this.challengeModel
+      .findOneAndUpdate({ _id: challengeId }, { $set: challenge })
       .exec();
 
     return challenge;
