@@ -1,9 +1,10 @@
 import { Document } from 'mongoose';
 import { Player } from 'src/players/entities/Player';
+import { ChallengeStatusEnum } from './ChallengeStatus.enum';
 
 export class Challenge extends Document {
   challengeDatetime: Date;
-  status: keyof typeof ChallengStatus;
+  status: keyof typeof ChallengeStatusEnum;
   challengeRequestDatetime: Date;
   challengeResponseDatetime: Date;
   requester: Player;
@@ -22,11 +23,3 @@ export type Match = {
 export type Result = {
   set: string;
 };
-
-export enum ChallengStatus {
-  REALIZED = 'DONE',
-  PENDING = 'PENDING',
-  ACCEPTED = 'I ACCEPT',
-  DENIED = 'DENIED',
-  CANCELED = 'CANCELED',
-}
