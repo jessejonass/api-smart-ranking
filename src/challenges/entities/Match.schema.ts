@@ -7,5 +7,8 @@ export const MatchSchema = new mongoose.Schema(
     def: { type: mongoose.Schema.Types.ObjectId, ref: 'Player' },
     result: [{ set: String }],
   },
-  { timestamps: true, collection: 'matches' },
+  {
+    timestamps: true,
+    collection: 'challenges',
+  },
 );

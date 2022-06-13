@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
-import { Result } from 'src/matches/entities/Result';
 import { Player } from 'src/players/entities/Player';
 import { ChallengeStatusEnum } from './ChallengeStatus.enum';
+import { Result } from './Result';
 
 export class Challenge extends Document {
   challengeDatetime: Date;
